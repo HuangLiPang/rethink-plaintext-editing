@@ -24,7 +24,7 @@ const TYPE_TO_ICON = {
   'application/json': IconJSONSVG
 };
 
-function FilesTable({ files, activeFile, setActiveFile }) {
+function FilesTable({ files, setIndex, activeFile, setActiveFile }) {
   return (
     <div className={css.files}>
       <table>
@@ -35,14 +35,17 @@ function FilesTable({ files, activeFile, setActiveFile }) {
           </tr>
         </thead>
         <tbody>
-          {files.map(file => (
+          {files.map((file, i) => (
             <tr
               key={file.name}
               className={classNames(
                 css.row,
                 activeFile && activeFile.name === file.name ? css.active : ''
               )}
-              onClick={() => setActiveFile(file)}
+              onClick={() => {
+                setActiveFile(file);
+                setIndex(i);
+              }}
             >
               <td className={css.file}>
                 <div
@@ -99,24 +102,19 @@ Previewer.propTypes = {
 
 // Uncomment keys to register editors for media types
 const REGISTERED_EDITORS = {
-  // "text/plain": PlaintextEditor,
+  "text/plain": PlaintextEditor,
   // "text/markdown": MarkdownEditor,
 };
 
 function PlaintextFilesChallenge() {
   const [files, setFiles] = useState([]);
+  const [index, setIndex] = useState(0);
   const [activeFile, setActiveFile] = useState(null);
 
   useEffect(() => {
     const files = listFiles();
     setFiles(files);
   }, []);
-
-  const write = file => {
-    console.log('Writing soon... ', file.name);
-
-    // TODO: Write the file to the `files` array
-  };
 
   const Editor = activeFile ? REGISTERED_EDITORS[activeFile.type] : null;
 
@@ -137,6 +135,7 @@ function PlaintextFilesChallenge() {
 
         <FilesTable
           files={files}
+          setIndex={setIndex}
           activeFile={activeFile}
           setActiveFile={setActiveFile}
         />
@@ -157,7 +156,7 @@ function PlaintextFilesChallenge() {
       <main className={css.editorWindow}>
         {activeFile && (
           <>
-            {Editor && <Editor file={activeFile} write={write} />}
+            {Editor && <Editor file={activeFile} index={index} files={files} setFiles={setFiles} />}
             {!Editor && <Previewer file={activeFile} />}
           </>
         )}
