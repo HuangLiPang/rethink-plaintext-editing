@@ -13,10 +13,12 @@
     "slate-history": "^0.59.0"
   },
   "devDependencies": {
+    "@emotion/css": "^11.0.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-react": "^7.20.5",
     "prettier": "^1.19.1",
+    "prismjs": "^1.22.0",
     "slate": "^0.59.0",
     "slate-react": "^0.59.0",
     "svg-inline-loader": "^0.8.2"
